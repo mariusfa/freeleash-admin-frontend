@@ -1,2 +1,2 @@
-export { Toggles } from './Toggles'
-export { NewToggle } from './NewToggle'
+export { Toggles } from './Toggles';
+export { NewToggle } from './NewToggle';

@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { postJson } from '../../api';
 
 interface FormData {
-    name: string
+    name: string;
 }
 
 export const NewTeam: React.FC = () => {
     const [formData, setFormData] = useState<FormData>({
-        name: ''
+        name: '',
     });
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,15 +16,21 @@ export const NewTeam: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await postJson('http://localhost:8080/team',formData)
+        await postJson('http://localhost:8080/team', formData);
     };
 
     return (
         <form onSubmit={handleSubmit}>
             <h2>Create team</h2>
-            <label htmlFor="name">Team name</label>
-            <input type="text" id="name" name="name" onChange={handleOnChange} value={formData.name}/>
+            <label htmlFor='name'>Team name</label>
+            <input
+                type='text'
+                id='name'
+                name='name'
+                onChange={handleOnChange}
+                value={formData.name}
+            />
             <button>Create team</button>
         </form>
     );
-}
+};
