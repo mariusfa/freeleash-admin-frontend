@@ -12,8 +12,8 @@ export const Teams: React.FC = () => {
 
     useEffect(() => {
         const getTeams = async () => {
-            const teams = await getJson('http://localhost:8080/team')
-            setTeams(teams)
+            const data = await getJson('http://localhost:8080/team')
+            setTeams(data)
         }
         getTeams()
     }, []);

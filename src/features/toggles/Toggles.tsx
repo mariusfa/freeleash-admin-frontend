@@ -15,8 +15,8 @@ export const Toggles: React.FC = () => {
 
     useEffect(() => {
         const getToggles = async () => {
-            const toggles = await getJson(`http://localhost:8080/toggle?team=${teamName}`)
-            setToggles(toggles)
+            const data = await getJson(`http://localhost:8080/toggle?team=${teamName}`)
+            setToggles(data)
             setFetchToggles(false)
         }
         getToggles()
