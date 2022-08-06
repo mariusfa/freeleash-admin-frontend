@@ -1,3 +1,3 @@
 export { Teams } from './Teams';
 export { NewTeam } from './NewTeam';
-export { TeamContextProvider } from './TeamContextProvider';
+export { TeamContextProvider, TeamContext } from './TeamContextProvider';
