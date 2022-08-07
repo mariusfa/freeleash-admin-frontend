@@ -22,6 +22,11 @@ export const Toggles: React.FC = () => {
             setFetchToggles(false);
         };
         getToggles();
+        
+        const interval = setInterval(() => {
+            getToggles();
+        }, 5000);
+        return () => clearInterval(interval);
     }, [teamName, fetchToggles]);
 
     const toggleClick = async ({ id, name, isToggled }: Toggle) => {
