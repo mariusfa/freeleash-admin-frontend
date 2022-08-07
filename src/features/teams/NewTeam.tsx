@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { postJson } from '../../api';
+import { TeamContext } from './TeamContextProvider';
 
 interface FormData {
     name: string;
 }
 
 export const NewTeam: React.FC = () => {
+    const { refetch } = useContext(TeamContext);
     const navigate = useNavigate();
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -19,7 +21,8 @@ export const NewTeam: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         await postJson('http://localhost:8080/team', formData);
-        navigate(`/${formData.name}`);
+        refetch();
+        navigate(`/${formData.name}/toggles`);
     };
 
     return (

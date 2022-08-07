@@ -9,14 +9,18 @@ const App = () => {
             <Header />
             <TeamContextProvider>
                 <Routes>
-                    <Route path="/" element={<Teams />} />
-                    <Route path="/new" element={<NewTeam />} />
-                    <Route path="/:teamName" element={<Toggles />} />
-                    <Route path="/:teamName/new" element={<NewToggle />} />
+                    <Route path='/' element={<Teams />} />
+                    <Route path='/new' element={<NewTeam />} />
+                    <Route path='/:teamName/toggles' element={<Toggles />} />
+                    <Route
+                        path='/:teamName/toggles/new'
+                        
+                        element={<NewToggle />}
+                    />
                 </Routes>
             </TeamContextProvider>
         </BrowserRouter>
     );
-}
+};
 
 export default App;

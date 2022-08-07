@@ -12,7 +12,7 @@ export const Teams: React.FC = () => {
             <ul>
                 {teams.map((team) => (
                     <li key={team.id}>
-                        <Link to={team.name.toString()}>{team.name}</Link>
+                        <Link to={`${team.name}/toggles`}>{team.name}</Link>
                     </li>
                 ))}
             </ul>

@@ -18,9 +18,10 @@ export const NewToggle: React.FC = () => {
         teamId: teamId,
     });
 
-    if (teamId === null) {
+    if (teamId === undefined) {
         return <p>error: could not find team: {teamName}</p>;
     }
+    console.log(teamId);
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -29,7 +30,7 @@ export const NewToggle: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         await postJson('http://localhost:8080/toggle', formData);
-        navigate(`/${teamName}`);
+        navigate(`/${teamName}/toggles`);
     };
 
     return (
