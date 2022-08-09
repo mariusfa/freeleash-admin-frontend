@@ -22,7 +22,7 @@ export const Toggles: React.FC = () => {
             setFetchToggles(false);
         };
         getToggles();
-        
+
         const interval = setInterval(() => {
             getToggles();
         }, 5000);
@@ -41,6 +41,8 @@ export const Toggles: React.FC = () => {
     return (
         <>
             <h2>Toggles for team {teamName}</h2>
+            <Link to={`/${teamName}/edit`}>Edit team</Link>
+            <br />
             <Link to={'new'}>Create new toggle</Link>
             <ul>
                 {toggles.map((toggle) => (
