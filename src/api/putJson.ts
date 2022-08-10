@@ -1,6 +1,6 @@
-export const postJson = async (url: string, data: object) => {
+export const putJson = async (url: string, data: object) => {
     const response = await fetch(url, {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
     });

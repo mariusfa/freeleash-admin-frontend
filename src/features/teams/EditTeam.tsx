@@ -1,23 +1,23 @@
 import { useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { TeamContext } from './TeamContextProvider';
 import { Form, Field } from 'react-final-form';
+import { putJson } from '../../api';
 
 export const EditTeam: React.FC = () => {
     const { teamName } = useParams();
     const { teams, refetch } = useContext(TeamContext);
-    const teamToEdit = teams.find((team) => team.name === teamName);
+    const teamId = teams.find((team) => team.name === teamName)?.id;
+    const navigate = useNavigate();
 
-    if (teamToEdit === undefined) {
+    if (teamId === undefined) {
         return <p>Could not find team by team name: {teamName}</p>;
     }
 
     const onSubmit = async (values: any) => {
-        console.log('submit');
-        const editedTeam = { ...teamToEdit, ...values };
-        //put data here
+        await putJson(`http://localhost:8080/team/${teamId}`, { ...values });
         refetch();
-        //navigate here
+        navigate(`/${values.name}/toggles`);
     };
 
     return (
