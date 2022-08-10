@@ -12,22 +12,27 @@ const App = () => {
     return (
         <BrowserRouter>
             <Header />
-            <TeamContextProvider>
-                <Routes>
-                    <Route path='/' element={<Teams />} />
-                    <Route path='/new' element={<NewTeam />} />
-                    <Route path='/:teamName/edit' element={<EditTeam />} />
-                    <Route path='/:teamName/toggles' element={<Toggles />} />
-                    <Route
-                        path='/:teamName/toggles/new'
-                        element={<NewToggle />}
-                    />
-                    <Route
-                        path='/:teamName/toggles/edit/:toggleId'
-                        element={<EditToggle />}
-                    />
-                </Routes>
-            </TeamContextProvider>
+            <div className='mx-auto text-center'>
+                <TeamContextProvider>
+                    <Routes>
+                        <Route path='/' element={<Teams />} />
+                        <Route path='/new' element={<NewTeam />} />
+                        <Route path='/:teamName/edit' element={<EditTeam />} />
+                        <Route
+                            path='/:teamName/toggles'
+                            element={<Toggles />}
+                        />
+                        <Route
+                            path='/:teamName/toggles/new'
+                            element={<NewToggle />}
+                        />
+                        <Route
+                            path='/:teamName/toggles/edit/:toggleId'
+                            element={<EditToggle />}
+                        />
+                    </Routes>
+                </TeamContextProvider>
+            </div>
         </BrowserRouter>
     );
 };

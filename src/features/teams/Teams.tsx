@@ -7,8 +7,10 @@ export const Teams: React.FC = () => {
 
     return (
         <div>
-            <h2>Teams</h2>
-            <Link to={'new'}>Create new team</Link>
+            <div className='flex'>
+                <h2>Teams</h2>
+                <Link to={'new'}>Create new team</Link>
+            </div>
             <ul>
                 {teams.map((team) => (
                     <li key={team.id}>
