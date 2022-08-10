@@ -6,7 +6,7 @@ import {
     TeamContextProvider,
     Teams,
 } from './features/teams';
-import { NewToggle, Toggles } from './features/toggles';
+import { EditToggle, NewToggle, Toggles } from './features/toggles';
 
 const App = () => {
     return (
@@ -21,6 +21,10 @@ const App = () => {
                     <Route
                         path='/:teamName/toggles/new'
                         element={<NewToggle />}
+                    />
+                    <Route
+                        path='/:teamName/toggles/edit/:toggleId'
+                        element={<EditToggle />}
                     />
                 </Routes>
             </TeamContextProvider>

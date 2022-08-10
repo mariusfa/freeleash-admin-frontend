@@ -55,6 +55,7 @@ export const Toggles: React.FC = () => {
                         <button onClick={() => toggleClick(toggle)}>
                             toggle
                         </button>
+                        <Link to={`edit/${toggle.id}`}>Edit</Link>
                     </li>
                 ))}
             </ul>
