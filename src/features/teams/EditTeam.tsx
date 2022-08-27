@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { TeamContext } from './TeamContextProvider';
 import { Form, Field } from 'react-final-form';
 import { putJson } from '../../api';
+import { Heading1, InputText, Label, PrimaryButton } from '../../components';
 
 export const EditTeam: React.FC = () => {
     const { teamName } = useParams();
@@ -21,16 +22,22 @@ export const EditTeam: React.FC = () => {
     };
 
     return (
-        <Form
-            onSubmit={onSubmit}
-            render={({ handleSubmit }) => (
-                <form onSubmit={handleSubmit}>
-                    <h2>Edit team</h2>
-                    <label>Team name</label>
-                    <Field name='name' component='input' placeholder='name' />
-                    <button type='submit'>Edit team</button>
-                </form>
-            )}
-        />
+        <>
+            <Heading1>Edit team</Heading1>
+            <Form
+                onSubmit={onSubmit}
+                render={({ handleSubmit }) => (
+                    <form className='w-fit mx-auto' onSubmit={handleSubmit}>
+                        <Label htmlFor='name'>Team name</Label>
+                        <Field name='name'>
+                            {(props) => (
+                                <InputText id='name' {...props.input} />
+                            )}
+                        </Field>
+                        <PrimaryButton>Edit team</PrimaryButton>
+                    </form>
+                )}
+            />
+        </>
     );
 };

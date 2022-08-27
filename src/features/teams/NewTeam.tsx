@@ -1,6 +1,8 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { postJson } from '../../api';
+import { Heading1, InputText, PrimaryButton } from '../../components';
+import { Label } from '../../components/Label';
 import { TeamContext } from './TeamContextProvider';
 
 interface FormData {
@@ -26,17 +28,18 @@ export const NewTeam: React.FC = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Create team</h2>
-            <label htmlFor='name'>Team name</label>
-            <input
-                type='text'
-                id='name'
-                name='name'
-                onChange={handleOnChange}
-                value={formData.name}
-            />
-            <button>Create team</button>
-        </form>
+        <>
+            <Heading1>Create team</Heading1>
+            <form className='w-fit mx-auto' onSubmit={handleSubmit}>
+                <Label htmlFor='name'>Team name</Label>
+                <InputText
+                    id='name'
+                    name='name'
+                    onChange={handleOnChange}
+                    value={formData.name}
+                />
+                <PrimaryButton>Create team</PrimaryButton>
+            </form>
+        </>
     );
 };
