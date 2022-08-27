@@ -11,8 +11,8 @@ import { EditToggle, NewToggle, Toggles } from './features/toggles';
 const App = () => {
     return (
         <BrowserRouter>
-            <Header />
-            <div className='mx-auto text-center'>
+            <div className='mx-auto container px-4'>
+                <Header />
                 <TeamContextProvider>
                     <Routes>
                         <Route path='/' element={<Teams />} />
