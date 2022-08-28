@@ -16,7 +16,7 @@ export const EditTeam: React.FC = () => {
     }
 
     const onSubmit = async (values: any) => {
-        await putJson(`http://localhost:8080/team/${teamId}`, { ...values });
+        await putJson(`http://localhost:8080/team/${teamId}`, values);
         refetch();
         navigate(`/${values.name}/toggles`);
     };
@@ -30,9 +30,7 @@ export const EditTeam: React.FC = () => {
                     <form className='w-fit mx-auto' onSubmit={handleSubmit}>
                         <Label htmlFor='name'>Team name</Label>
                         <Field name='name'>
-                            {(props) => (
-                                <InputText id='name' {...props.input} />
-                            )}
+                            {({ input }) => <InputText id='name' {...input} />}
                         </Field>
                         <PrimaryButton>Edit team</PrimaryButton>
                     </form>
