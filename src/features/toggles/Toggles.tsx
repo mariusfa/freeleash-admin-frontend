@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getJson } from '../../api';
+import { Heading1, PrimaryButton, SecondaryButton } from '../../components';
 
 interface Toggle {
     id: number;
@@ -12,6 +13,7 @@ export const Toggles: React.FC = () => {
     const [toggles, setToggles] = useState<Toggle[]>([]);
     const [fetchToggles, setFetchToggles] = useState(false);
     const { teamName } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getToggles = async () => {
@@ -40,22 +42,40 @@ export const Toggles: React.FC = () => {
 
     return (
         <>
-            <h2>Toggles for team {teamName}</h2>
-            <Link to={`/${teamName}/edit`}>Edit team</Link>
-            <br />
-            <Link to={'new'}>Create new toggle</Link>
-            <ul>
+            <Heading1>Toggles for team {teamName}</Heading1>
+            <div className='mx-auto my-5 flex justify-between'>
+                <PrimaryButton onClick={() => navigate('new')}>
+                    Create new toggle
+                </PrimaryButton>
+                <SecondaryButton onClick={() => navigate(`/${teamName}/edit`)}>
+                    Edit team
+                </SecondaryButton>
+            </div>
+            <ul className='my-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
                 {toggles.map((toggle) => (
-                    <li key={toggle.id}>
-                        <span>
-                            {toggle.name}
-                            {' is '}
-                            {toggle.isToggled ? 'ON ' : 'OFF '}
-                        </span>
-                        <button onClick={() => toggleClick(toggle)}>
-                            toggle
-                        </button>
-                        <Link to={`edit/${toggle.id}`}>Edit</Link>
+                    <li
+                        className='rounded-md border border-slate-200 p-6 shadow-md font-semibold text-lg text-slate-800
+                    hover:cursor-pointer flex justify-between'
+                        key={toggle.id}
+                        onClick={() => navigate(`edit/${toggle.id}`)}
+                    >
+                        <span>{toggle.name}</span>
+                        <label
+                            htmlFor={`toggle-${toggle.id}`}
+                            className='relative cursor-pointer flex items-center'
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                toggleClick(toggle);
+                            }}
+                        >
+                            <input
+                                type='checkbox'
+                                id={`toggle-${toggle.id}`}
+                                className='sr-only peer'
+                                checked={toggle.isToggled}
+                            />
+                            <div className='w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:absolute after:top-[4px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600'></div>
+                        </label>
                     </li>
                 ))}
             </ul>
