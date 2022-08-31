@@ -1,9 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getJson, putJson } from '../../api';
+import { putJson } from '../../api';
 import { Heading1, InputText, Label, PrimaryButton } from '../../components';
-import { TeamContext } from '../teams';
 
 export const EditToggle: React.FC = () => {
     const { teamName, toggleId } = useParams();
