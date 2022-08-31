@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getJson } from '../../api';
 import { Heading1, PrimaryButton, SecondaryButton } from '../../components';
 
@@ -51,7 +51,7 @@ export const Toggles: React.FC = () => {
                     Edit team
                 </SecondaryButton>
             </div>
-            <ul className='my-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+            <ul className='my-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'>
                 {toggles.map((toggle) => (
                     <li
                         className='rounded-md border border-slate-200 p-6 shadow-md font-semibold text-lg text-slate-800
