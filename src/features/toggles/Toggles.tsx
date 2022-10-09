@@ -1,7 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getJson } from '../../api';
-import { Heading1, PrimaryButton, SecondaryButton } from '../../components';
+import { deleteJson, getJson } from '../../api';
+import {
+    Heading1,
+    PrimaryButton,
+    SecondaryButton,
+    WarningButton,
+} from '../../components';
+import { TeamContext } from '../teams';
 
 interface Toggle {
     id: number;
@@ -13,6 +19,8 @@ export const Toggles: React.FC = () => {
     const [toggles, setToggles] = useState<Toggle[]>([]);
     const [fetchToggles, setFetchToggles] = useState(false);
     const { teamName } = useParams();
+    const { teams, refetch } = useContext(TeamContext);
+    const teamId = teams.find((team) => team.name === teamName)?.id;
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -40,6 +48,12 @@ export const Toggles: React.FC = () => {
         setFetchToggles(true);
     };
 
+    const onDeleteTeam = async () => {
+        await deleteJson(`http://localhost:8080/team/${teamId}`);
+        refetch();
+        navigate('/');
+    };
+
     return (
         <>
             <Heading1>Toggles for team {teamName}</Heading1>
@@ -47,9 +61,16 @@ export const Toggles: React.FC = () => {
                 <PrimaryButton onClick={() => navigate('new')}>
                     Create new toggle
                 </PrimaryButton>
-                <SecondaryButton onClick={() => navigate(`/${teamName}/edit`)}>
-                    Edit team
-                </SecondaryButton>
+                <div>
+                    <SecondaryButton
+                        onClick={() => navigate(`/${teamName}/edit`)}
+                    >
+                        Edit team
+                    </SecondaryButton>
+                    <WarningButton onClick={() => onDeleteTeam()}>
+                        Delete team
+                    </WarningButton>
+                </div>
             </div>
             <ul className='my-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'>
                 {toggles.map((toggle) => (
