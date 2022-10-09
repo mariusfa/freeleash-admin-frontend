@@ -1,6 +1,7 @@
 interface Props {
     children: React.ReactNode;
     onClick?: React.MouseEventHandler<HTMLButtonElement>;
+    type?: 'submit' | 'button'
 }
 
 export const PrimaryButton: React.FC<Props> = ({ children, ...rest }) => {

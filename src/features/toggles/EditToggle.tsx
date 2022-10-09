@@ -1,7 +1,13 @@
 import { Field, Form } from 'react-final-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { putJson } from '../../api';
-import { Heading1, InputText, Label, PrimaryButton } from '../../components';
+import { deleteJson, putJson } from '../../api';
+import {
+    Heading1,
+    InputText,
+    Label,
+    PrimaryButton,
+    WarningButton,
+} from '../../components';
 
 export const EditToggle: React.FC = () => {
     const { teamName, toggleId } = useParams();
@@ -12,6 +18,11 @@ export const EditToggle: React.FC = () => {
             ...values,
             isToggled: false,
         });
+        navigate(`/${teamName}/toggles`);
+    };
+
+    const onDelete = async () => {
+        await deleteJson(`http://localhost:8080/toggle/${toggleId}`);
         navigate(`/${teamName}/toggles`);
     };
 
@@ -26,7 +37,14 @@ export const EditToggle: React.FC = () => {
                         <Field name='name'>
                             {({ input }) => <InputText id='name' {...input} />}
                         </Field>
-                        <PrimaryButton>Edit toggle</PrimaryButton>
+                        <div className='flex justify-between flex-row'>
+                            <PrimaryButton type='submit'>
+                                Edit toggle
+                            </PrimaryButton>
+                            <WarningButton onClick={() => onDelete()}>
+                                Delete
+                            </WarningButton>
+                        </div>
                     </form>
                 )}
             />
