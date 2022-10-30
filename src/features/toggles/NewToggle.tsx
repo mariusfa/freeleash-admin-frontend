@@ -17,8 +17,11 @@ export const NewToggle: React.FC = () => {
 
     const onSubmit = async (values: any) => {
         await postJson('http://localhost:8080/toggle', {
-            name: values.name,
             teamId,
+            isToggled: false,
+            operator: 'AND',
+            conditions: [],
+            ...values,
         });
         navigate(`/${teamName}/toggles`);
     };
