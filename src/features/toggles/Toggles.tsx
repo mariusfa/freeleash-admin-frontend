@@ -39,11 +39,11 @@ export const Toggles: React.FC = () => {
         return () => clearInterval(interval);
     }, [teamName, fetchToggles]);
 
-    const toggleClick = async ({ id, name, isToggled }: Toggle) => {
+    const toggleClick = async ({ id, isToggled, ...rest }: Toggle) => {
         await fetch(`http://localhost:8080/toggle/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: name, isToggled: !isToggled }),
+            body: JSON.stringify({ ...rest, isToggled: !isToggled }),
         });
         setFetchToggles(true);
     };
