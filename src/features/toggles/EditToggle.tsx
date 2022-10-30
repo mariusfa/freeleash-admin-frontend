@@ -15,8 +15,10 @@ export const EditToggle: React.FC = () => {
 
     const onSubmit = async (values: any) => {
         await putJson(`http://localhost:8080/toggle/${toggleId}`, {
-            ...values,
+            operator: 'AND',
             isToggled: false,
+            conditions: [],
+            ...values,
         });
         navigate(`/${teamName}/toggles`);
     };
