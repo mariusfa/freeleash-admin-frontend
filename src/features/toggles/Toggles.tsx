@@ -8,12 +8,9 @@ import {
     WarningButton,
 } from '../../components';
 import { TeamContext } from '../teams';
+import { Toggle } from './types';
 
-interface Toggle {
-    id: number;
-    name: string;
-    isToggled: boolean;
-}
+
 
 export const Toggles: React.FC = () => {
     const [toggles, setToggles] = useState<Toggle[]>([]);

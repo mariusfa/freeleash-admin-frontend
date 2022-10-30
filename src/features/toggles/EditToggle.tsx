@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { deleteJson, putJson } from '../../api';
+import { deleteJson, getJson, putJson } from '../../api';
 import {
     Heading1,
     InputText,
@@ -8,10 +9,12 @@ import {
     PrimaryButton,
     WarningButton,
 } from '../../components';
+import { Toggle } from './types';
 
 export const EditToggle: React.FC = () => {
     const { teamName, toggleId } = useParams();
     const navigate = useNavigate();
+    const [toggle, setToggle] = useState<Toggle | null>(null);
 
     const onSubmit = async (values: any) => {
         await putJson(`http://localhost:8080/toggle/${toggleId}`, {
@@ -28,10 +31,23 @@ export const EditToggle: React.FC = () => {
         navigate(`/${teamName}/toggles`);
     };
 
+    useEffect(() => {
+        const getToggle = async () => {
+            const data = await getJson(
+                `http://localhost:8080/toggle/${toggleId}`
+            );
+            setToggle(data);
+        };
+        getToggle();
+    }, [toggle, toggleId]);
+
     return (
         <>
-            <Heading1>Edit toogle</Heading1>
+            <Heading1>Edit toogle: {toggle?.name}</Heading1>
             <Form
+                initialValues={{
+                    name: toggle?.name,
+                }}
                 onSubmit={onSubmit}
                 render={({ handleSubmit }) => (
                     <form className='w-fit mx-auto' onSubmit={handleSubmit}>
