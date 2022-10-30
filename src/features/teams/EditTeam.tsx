@@ -8,15 +8,15 @@ import { Heading1, InputText, Label, PrimaryButton } from '../../components';
 export const EditTeam: React.FC = () => {
     const { teamName } = useParams();
     const { teams, refetch } = useContext(TeamContext);
-    const teamId = teams.find((team) => team.name === teamName)?.id;
+    const team = teams.find((team) => team.name === teamName);
     const navigate = useNavigate();
 
-    if (teamId === undefined) {
+    if (team?.id === undefined) {
         return <p>Could not find team by team name: {teamName}</p>;
     }
 
     const onSubmit = async (values: any) => {
-        await putJson(`http://localhost:8080/team/${teamId}`, values);
+        await putJson(`http://localhost:8080/team/${team?.id}`, values);
         refetch();
         navigate(`/${values.name}/toggles`);
     };
@@ -25,6 +25,7 @@ export const EditTeam: React.FC = () => {
         <>
             <Heading1>Edit team</Heading1>
             <Form
+                initialValues={{ name: team.name }}
                 onSubmit={onSubmit}
                 render={({ handleSubmit }) => (
                     <form className='w-fit mx-auto' onSubmit={handleSubmit}>
