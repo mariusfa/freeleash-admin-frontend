@@ -11,7 +11,7 @@ import { EditToggle, NewToggle, Toggles } from './features/toggles';
 const App = () => {
     return (
         <BrowserRouter>
-            <div className='mx-auto container px-4'>
+            <div className='mx-auto container px-4 bg-white'>
                 <Header />
                 <TeamContextProvider>
                     <Routes>
