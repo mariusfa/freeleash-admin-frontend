@@ -1,15 +1,20 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { getJson } from '../../api';
+import { useFetch } from '../../api/useFetch';
 import { Team } from './types';
 
 export interface TeamContextInterface {
     teams: Team[];
     refetch: () => void;
+    isLoading: boolean;
+    isError: boolean;
 }
 
 export const TeamContext = createContext<TeamContextInterface>({
     teams: [],
     refetch: () => null,
+    isLoading: true,
+    isError: false,
 });
 
 interface Props {
@@ -17,20 +22,21 @@ interface Props {
 }
 
 export const TeamContextProvider: React.FC<Props> = ({ children }) => {
-    const [shouldRefetch, setShouldRefetch] = useState(false);
-    const [teams, setTeams] = useState<Team[]>([]);
+    const {
+        data: teams,
+        refetch,
+        isLoading,
+        isError,
+    } = useFetch<Team[]>('http://localhost:8080/team', []);
 
-    useEffect(() => {
-        const getTeams = async () => {
-            const data = await getJson('http://localhost:8080/team');
-            setTeams(data);
-        };
-        getTeams();
-        setShouldRefetch(false);
-    }, [shouldRefetch]);
     return (
         <TeamContext.Provider
-            value={{ teams: teams, refetch: () => setShouldRefetch(true) }}
+            value={{
+                teams: teams,
+                isLoading: isLoading,
+                isError: isError,
+                refetch: refetch,
+            }}
         >
             {children}
         </TeamContext.Provider>
