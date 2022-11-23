@@ -4,8 +4,16 @@ import { Heading1, PrimaryButton } from '../../components';
 import { TeamContext } from './TeamContextProvider';
 
 export const Teams: React.FC = () => {
-    const { teams } = useContext(TeamContext);
+    const { teams, isLoading, isError } = useContext(TeamContext);
     const navigate = useNavigate();
+
+    if (isError) {
+        return <div>Error</div>;
+    }
+
+    if (isLoading) {
+        return <div>Loading</div>;
+    }
 
     return (
         <div className='text-center'>
