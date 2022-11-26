@@ -1,6 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { getJson } from '../../api';
-import { useFetch } from '../../api/useFetch';
+import { useGetData } from '../../api/useGetData';
 import { Team } from './types';
 
 export interface TeamContextInterface {
@@ -27,7 +26,7 @@ export const TeamContextProvider: React.FC<Props> = ({ children }) => {
         refetch,
         isLoading,
         isError,
-    } = useFetch<Team[]>('http://localhost:8080/team', []);
+    } = useGetData<Team[]>('http://localhost:8080/team', []);
 
     return (
         <TeamContext.Provider

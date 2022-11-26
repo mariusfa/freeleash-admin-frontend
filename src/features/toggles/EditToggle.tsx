@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { deleteJson, getJson, putJson } from '../../api';
+import { deleteJson, putJson } from '../../api';
+import { useGetData } from '../../api';
 import {
     Heading1,
     InputText,
@@ -14,7 +14,23 @@ import { Toggle } from './types';
 export const EditToggle: React.FC = () => {
     const { teamName, toggleId } = useParams();
     const navigate = useNavigate();
-    const [toggle, setToggle] = useState<Toggle | null>(null);
+
+    const {
+        data: toggle,
+        isLoading,
+        isError,
+    } = useGetData<Toggle | null>(
+        `http://localhost:8080/toggle/${toggleId}`,
+        null
+    );
+
+    if (isError) {
+        return <div>Error getting toggle with id: ${toggleId}</div>;
+    }
+
+    if (isLoading) {
+        return <div>Loading toggles</div>;
+    }
 
     const onSubmit = async (values: any) => {
         await putJson(`http://localhost:8080/toggle/${toggleId}`, {
@@ -30,16 +46,6 @@ export const EditToggle: React.FC = () => {
         await deleteJson(`http://localhost:8080/toggle/${toggleId}`);
         navigate(`/${teamName}/toggles`);
     };
-
-    useEffect(() => {
-        const getToggle = async () => {
-            const data = await getJson(
-                `http://localhost:8080/toggle/${toggleId}`
-            );
-            setToggle(data);
-        };
-        getToggle();
-    }, [toggle, toggleId]);
 
     return (
         <>

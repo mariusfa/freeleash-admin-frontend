@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { deleteJson } from '../../api';
-import { useFetch } from '../../api/useFetch';
+import { useGetData } from '../../api';
 import {
     Heading1,
     PrimaryButton,
@@ -22,7 +22,7 @@ export const Toggles: React.FC = () => {
         isLoading,
         isError,
         refetch: refetchToggles,
-    } = useFetch<Toggle[]>(
+    } = useGetData<Toggle[]>(
         `http://localhost:8080/toggle?team=${teamName}`,
         [],
         5000
