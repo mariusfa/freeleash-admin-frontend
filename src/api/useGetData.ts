@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getJson } from './getJson';
 
-export const useFetch = <T>(
+export const useGetData = <T>(
     url: string,
     initData: T,
     intervalTime?: number
