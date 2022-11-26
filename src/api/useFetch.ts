@@ -13,7 +13,6 @@ export const useFetch = <T>(
 
     useEffect(() => {
         const getData = async () => {
-            console.log('fetching');
             const { data: result, error } = await getJson(url);
             setData(result);
             setIsError(!!error);
@@ -25,7 +24,6 @@ export const useFetch = <T>(
         if (intervalTime) {
             const interval = setInterval(() => {
                 getData();
-                console.log('hello');
             }, intervalTime);
             return () => clearInterval(interval);
         }

@@ -1,6 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { deleteJson, getJson } from '../../api';
+import { deleteJson } from '../../api';
+import { useFetch } from '../../api/useFetch';
 import {
     Heading1,
     PrimaryButton,
@@ -10,31 +11,22 @@ import {
 import { TeamContext } from '../teams';
 import { Toggle } from './types';
 
-
-
 export const Toggles: React.FC = () => {
-    const [toggles, setToggles] = useState<Toggle[]>([]);
-    const [fetchToggles, setFetchToggles] = useState(false);
     const { teamName } = useParams();
-    const { teams, refetch } = useContext(TeamContext);
+    const { teams, refetch: refetchTeams } = useContext(TeamContext);
     const teamId = teams.find((team) => team.name === teamName)?.id;
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const getToggles = async () => {
-            const data = await getJson(
-                `http://localhost:8080/toggle?team=${teamName}`
-            );
-            setToggles(data);
-            setFetchToggles(false);
-        };
-        getToggles();
-
-        const interval = setInterval(() => {
-            getToggles();
-        }, 5000);
-        return () => clearInterval(interval);
-    }, [teamName, fetchToggles]);
+    const {
+        data: toggles,
+        isLoading,
+        isError,
+        refetch: refetchToggles,
+    } = useFetch<Toggle[]>(
+        `http://localhost:8080/toggle?team=${teamName}`,
+        [],
+        5000
+    );
 
     const toggleClick = async ({ id, isToggled, ...rest }: Toggle) => {
         await fetch(`http://localhost:8080/toggle/${id}`, {
@@ -42,14 +34,22 @@ export const Toggles: React.FC = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...rest, isToggled: !isToggled }),
         });
-        setFetchToggles(true);
+        refetchToggles();
     };
 
     const onDeleteTeam = async () => {
         await deleteJson(`http://localhost:8080/team/${teamId}`);
-        refetch();
+        refetchTeams();
         navigate('/');
     };
+
+    if (isError) {
+        return <div>Error getting toggles</div>;
+    }
+
+    if (isLoading) {
+        return <div>Loading toggles</div>;
+    }
 
     return (
         <>
