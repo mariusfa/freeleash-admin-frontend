@@ -7,6 +7,7 @@ import {
     InputText,
     Label,
     PrimaryButton,
+    Spinner,
     WarningButton,
 } from '../../components';
 import { required } from '../../validation/validation';
@@ -40,7 +41,7 @@ export const EditToggle: React.FC = () => {
     }
 
     if (isLoading) {
-        return <div>Loading toggles</div>;
+        return <Spinner />;
     }
 
     const onSubmit = async (values: any) => {
@@ -72,10 +73,10 @@ export const EditToggle: React.FC = () => {
     return (
         <>
             <Heading1>Edit toogle: {toggle?.name}</Heading1>
-            {!isUpdateError && (
+            {isUpdateError && (
                 <ErrorMessage>Error updating toggle</ErrorMessage>
             )}
-            {!isDeleteError && (
+            {isDeleteError && (
                 <ErrorMessage>Error deleting toggle</ErrorMessage>
             )}
             <Form

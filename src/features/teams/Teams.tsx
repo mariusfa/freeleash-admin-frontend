@@ -1,6 +1,11 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ErrorMessage, Heading1, PrimaryButton } from '../../components';
+import {
+    ErrorMessage,
+    Heading1,
+    PrimaryButton,
+    Spinner,
+} from '../../components';
 import { TeamContext } from './TeamContextProvider';
 
 export const Teams: React.FC = () => {
@@ -12,7 +17,7 @@ export const Teams: React.FC = () => {
     }
 
     if (isLoading) {
-        return <div>Loading</div>;
+        return <Spinner />;
     }
 
     return (

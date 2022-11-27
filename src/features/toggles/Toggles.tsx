@@ -6,6 +6,7 @@ import {
     Heading1,
     PrimaryButton,
     SecondaryButton,
+    Spinner,
     WarningButton,
 } from '../../components';
 import { TeamContext } from '../teams';
@@ -57,7 +58,7 @@ export const Toggles: React.FC = () => {
     }
 
     if (isLoading) {
-        return <div>Loading toggles</div>;
+        return <Spinner />;
     }
 
     return (
