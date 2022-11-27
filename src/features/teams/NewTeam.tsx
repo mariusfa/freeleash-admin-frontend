@@ -13,10 +13,11 @@ export const NewTeam: React.FC = () => {
     const { sendData, isSubmitting, isError } = useSendData();
 
     const onSubmit = async (values: any) => {
-        // await postJson('http://localhost:8080/team', values);
-        await sendData('http://localhost:8080/team', values);
-        refetch();
-        navigate(`/${values.name}/toggles`);
+        const { error } = await sendData('http://localhost:8080/team', values);
+        if (!error) {
+            refetch();
+            navigate(`/${values.name}/toggles`);
+        }
     };
 
     return (
@@ -31,7 +32,9 @@ export const NewTeam: React.FC = () => {
                         <Field name='name'>
                             {({ input }) => <InputText id='name' {...input} />}
                         </Field>
-                        <PrimaryButton disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Create team'}</PrimaryButton>
+                        <PrimaryButton disabled={isSubmitting}>
+                            {isSubmitting ? 'Submitting...' : 'Create team'}
+                        </PrimaryButton>
                     </form>
                 )}
             ></Form>

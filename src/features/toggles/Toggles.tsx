@@ -25,7 +25,7 @@ export const Toggles: React.FC = () => {
     } = useGetData<Toggle[]>(
         `http://localhost:8080/toggle?team=${teamName}`,
         [],
-        5000
+        20000
     );
 
     const toggleClick = async ({ id, isToggled, ...rest }: Toggle) => {
