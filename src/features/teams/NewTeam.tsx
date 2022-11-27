@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useNavigate } from 'react-router-dom';
 import { postJson } from '../../api';
+import { useSendData } from '../../api/useSendData';
 import { Heading1, InputText, PrimaryButton } from '../../components';
 import { Label } from '../../components/Label';
 import { TeamContext } from './TeamContextProvider';
@@ -9,9 +10,11 @@ import { TeamContext } from './TeamContextProvider';
 export const NewTeam: React.FC = () => {
     const { refetch } = useContext(TeamContext);
     const navigate = useNavigate();
+    const { sendData, isSubmitting, isError } = useSendData();
 
     const onSubmit = async (values: any) => {
-        await postJson('http://localhost:8080/team', values);
+        // await postJson('http://localhost:8080/team', values);
+        await sendData('http://localhost:8080/team', values);
         refetch();
         navigate(`/${values.name}/toggles`);
     };
@@ -19,6 +22,7 @@ export const NewTeam: React.FC = () => {
     return (
         <>
             <Heading1>Create team</Heading1>
+            {isError && <div>Error submitting new team</div>}
             <Form
                 onSubmit={onSubmit}
                 render={({ handleSubmit }) => (
@@ -27,7 +31,7 @@ export const NewTeam: React.FC = () => {
                         <Field name='name'>
                             {({ input }) => <InputText id='name' {...input} />}
                         </Field>
-                        <PrimaryButton>Create team</PrimaryButton>
+                        <PrimaryButton disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Create team'}</PrimaryButton>
                     </form>
                 )}
             ></Form>
