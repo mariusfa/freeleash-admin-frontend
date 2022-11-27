@@ -17,13 +17,17 @@ export const NewToggle: React.FC = () => {
     }
 
     const onSubmit = async (values: any) => {
-        const { error } = await sendData('http://localhost:8080/toggle', {
-            teamId,
-            isToggled: false,
-            operator: 'AND',
-            conditions: [],
-            ...values,
-        });
+        const { error } = await sendData(
+            'http://localhost:8080/toggle',
+            'POST',
+            {
+                teamId,
+                isToggled: false,
+                operator: 'AND',
+                conditions: [],
+                ...values,
+            }
+        );
         if (!error) {
             navigate(`/${teamName}/toggles`);
         }

@@ -1,21 +1,27 @@
 import { useState } from 'react';
-import { postJson } from './postJson';
+import { sendJson } from './sendJson';
 
 export const useSendData = (): {
     isSubmitting: boolean;
     isError: boolean;
     sendData: (
         url: string,
-        data: object | object[]
+        method: 'POST' | 'PUT' | 'DELETE',
+        data?: object | object[]
     ) => Promise<{ error: boolean }>;
 } => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isError, setIsError] = useState(false);
 
-    const sendData = async (url: string, data: object | object[]) => {
+    const sendData = async (
+        url: string,
+        method: 'POST' | 'PUT' | 'DELETE',
+        data?: object | object[]
+    ) => {
         setIsSubmitting(true);
         setIsError(false);
-        const { error } = await postJson(url, data);
+
+        const { error } = await sendJson(url, method, data)
 
         setIsSubmitting(false);
         if (error) {

@@ -12,7 +12,11 @@ export const NewTeam: React.FC = () => {
     const { sendData, isSubmitting, isError } = useSendData();
 
     const onSubmit = async (values: any) => {
-        const { error } = await sendData('http://localhost:8080/team', values);
+        const { error } = await sendData(
+            'http://localhost:8080/team',
+            'POST',
+            values
+        );
         if (!error) {
             refetch();
             navigate(`/${values.name}/toggles`);
