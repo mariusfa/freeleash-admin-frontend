@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { deleteJson } from '../../api';
+import { deleteJson, useSendData } from '../../api';
 import { useGetData } from '../../api';
 import {
     Heading1,
@@ -16,6 +16,7 @@ export const Toggles: React.FC = () => {
     const { teams, refetch: refetchTeams } = useContext(TeamContext);
     const teamId = teams.find((team) => team.name === teamName)?.id;
     const navigate = useNavigate();
+    const { sendData, isError: isErrorDelete, isSubmitting } = useSendData();
 
     const {
         data: toggles,
@@ -38,9 +39,14 @@ export const Toggles: React.FC = () => {
     };
 
     const onDeleteTeam = async () => {
-        await deleteJson(`http://localhost:8080/team/${teamId}`);
-        refetchTeams();
-        navigate('/');
+        const { error } = await sendData(
+            `http://localhost:8080/team/${teamId}`,
+            'DELETE'
+        );
+        if (!error) {
+            refetchTeams();
+            navigate('/');
+        }
     };
 
     if (isError) {
@@ -54,6 +60,7 @@ export const Toggles: React.FC = () => {
     return (
         <>
             <Heading1>Toggles for team {teamName}</Heading1>
+            {isErrorDelete && <div>Error deleting team</div>}
             <div className='mx-auto my-5 flex justify-between'>
                 <PrimaryButton onClick={() => navigate('new')}>
                     Create new toggle
@@ -64,8 +71,11 @@ export const Toggles: React.FC = () => {
                     >
                         Edit team
                     </SecondaryButton>
-                    <WarningButton onClick={() => onDeleteTeam()}>
-                        Delete team
+                    <WarningButton
+                        disabled={isSubmitting}
+                        onClick={() => onDeleteTeam()}
+                    >
+                        {isSubmitting ? 'Deleting...' : 'Delete team'}
                     </WarningButton>
                 </div>
             </div>

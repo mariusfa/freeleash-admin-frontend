@@ -1,9 +1,9 @@
-interface Props {
-    children: React.ReactNode;
-    onClick?: React.MouseEventHandler<HTMLButtonElement>;
-}
-
-export const WarningButton: React.FC<Props> = ({ children, ...rest }) => {
+export const WarningButton: React.FC<
+    React.DetailedHTMLProps<
+        React.ButtonHTMLAttributes<HTMLButtonElement>,
+        HTMLButtonElement
+    >
+> = ({ children, ...rest }) => {
     return (
         <button
             type='button'
