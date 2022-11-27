@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { deleteJson, useSendData } from '../../api';
-import { useGetData } from '../../api';
+import { useGetData, useSendData } from '../../api';
 import {
     Heading1,
     PrimaryButton,
@@ -17,6 +16,7 @@ export const Toggles: React.FC = () => {
     const teamId = teams.find((team) => team.name === teamName)?.id;
     const navigate = useNavigate();
     const { sendData, isError: isErrorDelete, isSubmitting } = useSendData();
+    const { sendData: updateToggle, isError: isUpdateError } = useSendData();
 
     const {
         data: toggles,
@@ -30,12 +30,14 @@ export const Toggles: React.FC = () => {
     );
 
     const toggleClick = async ({ id, isToggled, ...rest }: Toggle) => {
-        await fetch(`http://localhost:8080/toggle/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...rest, isToggled: !isToggled }),
-        });
-        refetchToggles();
+        const { error } = await updateToggle(
+            `http://localhost:8080/toggle/${id}`,
+            'PUT',
+            { ...rest, isToggled: !isToggled }
+        );
+        if (!error) {
+            refetchToggles();
+        }
     };
 
     const onDeleteTeam = async () => {
@@ -61,6 +63,7 @@ export const Toggles: React.FC = () => {
         <>
             <Heading1>Toggles for team {teamName}</Heading1>
             {isErrorDelete && <div>Error deleting team</div>}
+            {isUpdateError && <div>Error updating toggle</div>}
             <div className='mx-auto my-5 flex justify-between'>
                 <PrimaryButton onClick={() => navigate('new')}>
                     Create new toggle

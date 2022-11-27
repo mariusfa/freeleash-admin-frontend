@@ -1,5 +1,5 @@
-import React, { createContext, useEffect, useState } from 'react';
-import { useGetData } from '../../api/useGetData';
+import React, { createContext } from 'react';
+import { useGetData } from '../../api';
 import { Team } from './types';
 
 export interface TeamContextInterface {

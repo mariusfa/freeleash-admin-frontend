@@ -1,7 +1,6 @@
 import { Field, Form } from 'react-final-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { deleteJson, putJson } from '../../api';
-import { useGetData } from '../../api';
+import { useGetData, useSendData } from '../../api';
 import {
     Heading1,
     InputText,
@@ -14,6 +13,16 @@ import { Toggle } from './types';
 export const EditToggle: React.FC = () => {
     const { teamName, toggleId } = useParams();
     const navigate = useNavigate();
+    const {
+        sendData: updateToggle,
+        isError: isUpdateError,
+        isSubmitting: isUpdateSubmitting,
+    } = useSendData();
+    const {
+        sendData: deleteToggle,
+        isError: isDeleteError,
+        isSubmitting: isDeleteSubmitting,
+    } = useSendData();
 
     const {
         data: toggle,
@@ -33,23 +42,36 @@ export const EditToggle: React.FC = () => {
     }
 
     const onSubmit = async (values: any) => {
-        await putJson(`http://localhost:8080/toggle/${toggleId}`, {
-            operator: 'AND',
-            isToggled: false,
-            conditions: [],
-            ...values,
-        });
-        navigate(`/${teamName}/toggles`);
+        const { error } = await updateToggle(
+            `http://localhost:8080/toggle/${toggleId}`,
+            'PUT',
+            {
+                operator: 'AND',
+                isToggled: false,
+                conditions: [],
+                ...values,
+            }
+        );
+        if (!error) {
+            navigate(`/${teamName}/toggles`);
+        }
     };
 
     const onDelete = async () => {
-        await deleteJson(`http://localhost:8080/toggle/${toggleId}`);
-        navigate(`/${teamName}/toggles`);
+        const { error } = await deleteToggle(
+            `http://localhost:8080/toggle/${toggleId}`,
+            'DELETE'
+        );
+        if (!error) {
+            navigate(`/${teamName}/toggles`);
+        }
     };
 
     return (
         <>
             <Heading1>Edit toogle: {toggle?.name}</Heading1>
+            {isUpdateError && <div>Error updating toggle</div>}
+            {isDeleteError && <div>Error deleting toggle</div>}
             <Form
                 initialValues={{
                     name: toggle?.name,
@@ -62,11 +84,19 @@ export const EditToggle: React.FC = () => {
                             {({ input }) => <InputText id='name' {...input} />}
                         </Field>
                         <div className='flex justify-between flex-row'>
-                            <PrimaryButton type='submit'>
-                                Edit toggle
+                            <PrimaryButton
+                                disabled={isUpdateSubmitting}
+                                type='submit'
+                            >
+                                {isUpdateSubmitting
+                                    ? 'Submitting...'
+                                    : 'Edit toggle'}
                             </PrimaryButton>
-                            <WarningButton onClick={() => onDelete()}>
-                                Delete
+                            <WarningButton
+                                disabled={isDeleteError}
+                                onClick={() => onDelete()}
+                            >
+                                {isDeleteSubmitting ? 'Deleting...' : 'Delete'}
                             </WarningButton>
                         </div>
                     </form>

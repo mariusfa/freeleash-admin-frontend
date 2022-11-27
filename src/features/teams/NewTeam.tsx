@@ -2,8 +2,7 @@ import { useContext } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useNavigate } from 'react-router-dom';
 import { useSendData } from '../../api';
-import { Heading1, InputText, PrimaryButton } from '../../components';
-import { Label } from '../../components/Label';
+import { Heading1, InputText, Label, PrimaryButton } from '../../components';
 import { TeamContext } from './TeamContextProvider';
 
 export const NewTeam: React.FC = () => {
