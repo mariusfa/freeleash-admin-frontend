@@ -4,6 +4,7 @@ import { TeamContext } from './TeamContextProvider';
 import { Form, Field } from 'react-final-form';
 import { useSendData } from '../../api';
 import { Heading1, InputText, Label, PrimaryButton } from '../../components';
+import { required } from '../../validation/validation';
 
 export const EditTeam: React.FC = () => {
     const { teamName } = useParams();
@@ -38,8 +39,10 @@ export const EditTeam: React.FC = () => {
                 render={({ handleSubmit }) => (
                     <form className='w-fit mx-auto' onSubmit={handleSubmit}>
                         <Label htmlFor='name'>Team name</Label>
-                        <Field name='name'>
-                            {({ input }) => <InputText id='name' {...input} />}
+                        <Field name='name' validate={required}>
+                            {({ input, meta }) => (
+                                <InputText id='name' {...input} meta={meta} />
+                            )}
                         </Field>
                         <PrimaryButton disabled={isSubmitting}>
                             {isSubmitting ? 'Submitting...' : 'Edit team'}

@@ -8,6 +8,7 @@ import {
     PrimaryButton,
     WarningButton,
 } from '../../components';
+import { required } from '../../validation/validation';
 import { Toggle } from './types';
 
 export const EditToggle: React.FC = () => {
@@ -80,8 +81,10 @@ export const EditToggle: React.FC = () => {
                 render={({ handleSubmit }) => (
                     <form className='w-fit mx-auto' onSubmit={handleSubmit}>
                         <Label htmlFor='name'>Toggle name</Label>
-                        <Field name='name'>
-                            {({ input }) => <InputText id='name' {...input} />}
+                        <Field name='name' validate={required}>
+                            {({ input, meta }) => (
+                                <InputText id='name' {...input} meta={meta} />
+                            )}
                         </Field>
                         <div className='flex justify-between flex-row'>
                             <PrimaryButton
