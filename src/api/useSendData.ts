@@ -14,6 +14,7 @@ export const useSendData = (): {
 
     const sendData = async (url: string, data: object | object[]) => {
         setIsSubmitting(true);
+        setIsError(false);
         const { error } = await postJson(url, data);
 
         setIsSubmitting(false);

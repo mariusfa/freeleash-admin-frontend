@@ -1,8 +1,7 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useNavigate } from 'react-router-dom';
-import { postJson } from '../../api';
-import { useSendData } from '../../api/useSendData';
+import { useSendData } from '../../api';
 import { Heading1, InputText, PrimaryButton } from '../../components';
 import { Label } from '../../components/Label';
 import { TeamContext } from './TeamContextProvider';
