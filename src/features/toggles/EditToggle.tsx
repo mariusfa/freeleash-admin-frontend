@@ -2,6 +2,7 @@ import { Field, Form } from 'react-final-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetData, useSendData } from '../../api';
 import {
+    ErrorMessage,
     Heading1,
     InputText,
     Label,
@@ -71,8 +72,12 @@ export const EditToggle: React.FC = () => {
     return (
         <>
             <Heading1>Edit toogle: {toggle?.name}</Heading1>
-            {isUpdateError && <div>Error updating toggle</div>}
-            {isDeleteError && <div>Error deleting toggle</div>}
+            {!isUpdateError && (
+                <ErrorMessage>Error updating toggle</ErrorMessage>
+            )}
+            {!isDeleteError && (
+                <ErrorMessage>Error deleting toggle</ErrorMessage>
+            )}
             <Form
                 initialValues={{
                     name: toggle?.name,

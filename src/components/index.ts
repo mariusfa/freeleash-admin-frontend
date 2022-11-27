@@ -4,3 +4,4 @@ export { SecondaryButton } from './SecondaryButton';
 export { WarningButton } from './WarningButton';
 export { Label } from './Label';
 export { InputText } from './InputText';
+export { ErrorMessage } from './ErrorMessage';

@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSendData } from '../../api';
-import { Heading1, InputText, Label, PrimaryButton } from '../../components';
+import { ErrorMessage, Heading1, InputText, Label, PrimaryButton } from '../../components';
 import { required } from '../../validation/validation';
 import { TeamContext } from '../teams';
 
@@ -37,7 +37,7 @@ export const NewToggle: React.FC = () => {
     return (
         <>
             <Heading1>Create toggle</Heading1>
-            {isError && <div>Error submitting new team</div>}
+            {isError && <ErrorMessage>Error submitting new team</ErrorMessage>}
             <Form
                 onSubmit={onSubmit}
                 render={({ handleSubmit }) => (

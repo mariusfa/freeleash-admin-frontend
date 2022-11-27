@@ -2,7 +2,13 @@ import { useContext } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useNavigate } from 'react-router-dom';
 import { useSendData } from '../../api';
-import { Heading1, InputText, Label, PrimaryButton } from '../../components';
+import {
+    ErrorMessage,
+    Heading1,
+    InputText,
+    Label,
+    PrimaryButton,
+} from '../../components';
 import { required } from '../../validation/validation';
 import { TeamContext } from './TeamContextProvider';
 
@@ -26,7 +32,7 @@ export const NewTeam: React.FC = () => {
     return (
         <>
             <Heading1>Create team</Heading1>
-            {isError && <div>Error submitting new team</div>}
+            {isError && <ErrorMessage>Creating new team failed</ErrorMessage>}
             <Form
                 onSubmit={onSubmit}
                 render={({ handleSubmit }) => (

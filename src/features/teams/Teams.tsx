@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Heading1, PrimaryButton } from '../../components';
+import { ErrorMessage, Heading1, PrimaryButton } from '../../components';
 import { TeamContext } from './TeamContextProvider';
 
 export const Teams: React.FC = () => {
@@ -8,7 +8,7 @@ export const Teams: React.FC = () => {
     const navigate = useNavigate();
 
     if (isError) {
-        return <div>Error</div>;
+        return <ErrorMessage>Failed getting teams</ErrorMessage>;
     }
 
     if (isLoading) {

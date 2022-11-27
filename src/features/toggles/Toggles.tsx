@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetData, useSendData } from '../../api';
 import {
+    ErrorMessage,
     Heading1,
     PrimaryButton,
     SecondaryButton,
@@ -52,7 +53,7 @@ export const Toggles: React.FC = () => {
     };
 
     if (isError) {
-        return <div>Error getting toggles</div>;
+        return <ErrorMessage>Failed getting toggles</ErrorMessage>;
     }
 
     if (isLoading) {
@@ -62,8 +63,10 @@ export const Toggles: React.FC = () => {
     return (
         <>
             <Heading1>Toggles for team {teamName}</Heading1>
-            {isErrorDelete && <div>Error deleting team</div>}
-            {isUpdateError && <div>Error updating toggle</div>}
+            {isErrorDelete && <ErrorMessage>Deleting team failed</ErrorMessage>}
+            {isUpdateError && (
+                <ErrorMessage>Updating toggle failed</ErrorMessage>
+            )}
             <div className='mx-auto my-5 flex justify-between'>
                 <PrimaryButton onClick={() => navigate('new')}>
                     Create new toggle

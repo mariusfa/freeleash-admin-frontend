@@ -3,7 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { TeamContext } from './TeamContextProvider';
 import { Form, Field } from 'react-final-form';
 import { useSendData } from '../../api';
-import { Heading1, InputText, Label, PrimaryButton } from '../../components';
+import {
+    ErrorMessage,
+    Heading1,
+    InputText,
+    Label,
+    PrimaryButton,
+} from '../../components';
 import { required } from '../../validation/validation';
 
 export const EditTeam: React.FC = () => {
@@ -32,7 +38,7 @@ export const EditTeam: React.FC = () => {
     return (
         <>
             <Heading1>Edit team</Heading1>
-            {isError && <div>Error updating team</div>}
+            {isError && <ErrorMessage>Updating team failed</ErrorMessage>}
             <Form
                 initialValues={{ name: team.name }}
                 onSubmit={onSubmit}
