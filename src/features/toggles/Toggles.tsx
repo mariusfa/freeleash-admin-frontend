@@ -31,11 +31,14 @@ export const Toggles: React.FC = () => {
         20000
     );
 
-    const toggleClick = async ({ id, isToggled, ...rest }: Toggle) => {
+    const toggleClick = async ({ id, ...rest }: Toggle) => {
         const { error } = await updateToggle(
             `http://localhost:8080/toggle/${id}`,
             'PUT',
-            { ...rest, isToggled: !isToggled }
+            {
+                ...rest,
+                isToggled: !rest.isToggled,
+            }
         );
         if (!error) {
             refetchToggles();
@@ -73,9 +76,7 @@ export const Toggles: React.FC = () => {
                     Create new toggle
                 </PrimaryButton>
                 <div>
-                    <SecondaryButton
-                        onClick={() => navigate(`/${teamName}/edit`)}
-                    >
+                    <SecondaryButton onClick={() => console.log('hello')}>
                         Edit team
                     </SecondaryButton>
                     <WarningButton
@@ -100,7 +101,6 @@ export const Toggles: React.FC = () => {
                             className='relative cursor-pointer flex items-center'
                             onClick={(e) => {
                                 e.stopPropagation();
-                                toggleClick(toggle);
                             }}
                         >
                             <input
@@ -109,6 +109,7 @@ export const Toggles: React.FC = () => {
                                 className='sr-only peer'
                                 checked={toggle.isToggled}
                                 readOnly
+                                onClick={() => toggleClick(toggle)}
                             />
                             <div className='w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:absolute after:top-[4px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600'></div>
                         </label>

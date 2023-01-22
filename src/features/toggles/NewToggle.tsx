@@ -2,20 +2,18 @@ import { useContext, useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSendData } from '../../api';
+import { mapToConditions } from '../../api/conditionsMap';
 import {
     ErrorMessage,
     Heading1,
     InputText,
     Label,
-    PrimaryButton,
-    SecondaryButton,
+    PrimaryButton
 } from '../../components';
-import { required } from '../../validation/validation';
-import { TeamContext } from '../teams';
-import { v4 as uuidv4 } from 'uuid';
-import { ToggleOperator } from '../../components/ToggleOperator';
 import { Conditions } from '../../components/conditions/Conditions';
 import { ConditionId } from '../../components/conditions/types';
+import { required } from '../../validation/validation';
+import { TeamContext } from '../teams';
 
 export const NewToggle: React.FC = () => {
     const navigate = useNavigate();
@@ -25,21 +23,9 @@ export const NewToggle: React.FC = () => {
     const { sendData, isError, isSubmitting } = useSendData();
     const [conditionIds, setConditionIds] = useState<ConditionId[]>([]);
 
-
     if (teamId === undefined) {
         return <p>error: could not find team: {teamName}</p>;
     }
-
-    const mapToConditions = (values: any) =>
-        conditionIds.map((condition) => {
-            return {
-                field: values[`condition-${condition.id}`],
-                operator: values[`condition-operator-${condition.id}`],
-                contents: condition.contentIds.map(
-                    (contentId) => values[`content-${contentId}`]
-                ),
-            };
-        });
 
     const onSubmit = async (values: any) => {
         const { error } = await sendData(
@@ -49,7 +35,7 @@ export const NewToggle: React.FC = () => {
                 teamId,
                 isToggled: false,
                 operator: values.operator,
-                conditions: mapToConditions(values),
+                conditions: mapToConditions(values, conditionIds),
                 name: values.name,
             }
         );
@@ -57,8 +43,6 @@ export const NewToggle: React.FC = () => {
             navigate(`/${teamName}/toggles`);
         }
     };
-
-
 
     return (
         <>
