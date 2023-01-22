@@ -1,6 +1,6 @@
 interface Props {
     children: React.ReactNode;
-    htmlFor: string;
+    htmlFor?: string;
 }
 
 export const Label: React.FC<Props> = ({ children, ...props }) => {
