@@ -26,8 +26,6 @@ export const NewToggle: React.FC = () => {
     }
 
     const onSubmit = async (values: ToggleForm) => {
-        console.log(values);
-        
         const { error } = await sendData(
             'http://localhost:8080/toggle',
             'POST',
