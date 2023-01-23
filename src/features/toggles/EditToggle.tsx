@@ -3,7 +3,6 @@ import { Field, Form } from 'react-final-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { useGetData, useSendData } from '../../api';
-import { mapToConditions } from '../../api/conditionsMap';
 import {
     ErrorMessage,
     Heading1,
@@ -11,12 +10,11 @@ import {
     Label,
     PrimaryButton,
     Spinner,
-    WarningButton
+    WarningButton,
 } from '../../components';
 import { Conditions } from '../../components/conditions/Conditions';
-import { ConditionId } from '../../components/conditions/types';
 import { required } from '../../validation/validation';
-import { Toggle } from './types';
+import { Condition, Content, mapToConditionsDTO, ToggleDTO, ToggleForm } from './types';
 
 export const EditToggle: React.FC = () => {
     const { teamName, toggleId } = useParams();
@@ -31,57 +29,39 @@ export const EditToggle: React.FC = () => {
         isError: isDeleteError,
         isSubmitting: isDeleteSubmitting,
     } = useSendData();
-    const [conditionIds, setConditionIds] = useState<ConditionId[]>([]);
-    const [initialValues, setInitialValues] = useState<any>({});
+    const [initialValues, setInitialValues] = useState<ToggleForm | object>({});
 
     const {
         data: toggle,
         isLoading,
         isError,
-    } = useGetData<Toggle | null>(
+    } = useGetData<ToggleDTO | null>(
         `http://localhost:8080/toggle/${toggleId}`,
         null
     );
 
     useEffect(() => {
-        const getConditionIds = (toggle: Toggle | null): ConditionId[] => {
-            return (
-                toggle?.conditions.map((condition) => {
+        const getInitialValues = (toggle: ToggleDTO | null): ToggleForm => {
+            return {
+                name: toggle?.name ?? '',
+                operator: toggle?.operator ?? 'AND',
+                conditions: toggle?.conditions.map((condition): Condition => {
                     return {
+                        field: condition.field,
+                        operator: condition.operator,
                         id: uuidv4(),
-                        contentIds: condition.contents.map((content) =>
-                            uuidv4()
-                        ),
-                    };
-                }) ?? []
-            );
+                        contents: condition.contents.map((content): Content => {
+                            return {
+                                id: uuidv4(),
+                                value: content
+                            }
+                        })
+                    }
+                }) ?? [],
+            };
         };
-
-        setConditionIds(getConditionIds(toggle));
+        setInitialValues(getInitialValues(toggle))
     }, [toggle]);
-
-    useEffect(() => {
-        const getInitialValues = (toggle: Toggle | null) => {
-            console.log(toggle);
-            console.log(conditionIds);
-
-            let values: any = {};
-            values.name = toggle?.name;
-            values.operator = toggle?.operator;
-            toggle?.conditions.forEach((condition, index) => {
-                values[`condition-${conditionIds[index].id}`] = condition.field;
-                values[`condition-operator-${conditionIds[index].id}`] =
-                    condition.operator;
-                condition.contents.forEach((content, contentIndex) => {
-                    values[
-                        `content-${conditionIds[index].contentIds[contentIndex]}`
-                    ] = content;
-                });
-            });
-            return values;
-        };
-        setInitialValues(getInitialValues(toggle));
-    }, [conditionIds]);
 
     if (isError) {
         return <div>Error getting toggle with id: ${toggleId}</div>;
@@ -91,7 +71,7 @@ export const EditToggle: React.FC = () => {
         return <Spinner />;
     }
 
-    const onSubmit = async (values: any) => {
+    const onSubmit = async (values: ToggleForm) => {
         const { error } = await updateToggle(
             `http://localhost:8080/toggle/${toggleId}`,
             'PUT',
@@ -99,7 +79,7 @@ export const EditToggle: React.FC = () => {
                 operator: values.operator,
                 name: values.name,
                 isToggled: toggle?.isToggled ?? false,
-                conditions: mapToConditions(values, conditionIds)
+                conditions: mapToConditionsDTO(values.conditions),
             }
         );
         if (!error) {
@@ -116,43 +96,6 @@ export const EditToggle: React.FC = () => {
             navigate(`/${teamName}/toggles`);
         }
     };
-
-    // useEffect(() => {
-    //     // const getInitialValues = (toggle: Toggle | null) => {
-    //     //     let values: any = {};
-    //     //     values.name = toggle?.name;
-    //     //     values.operator = toggle?.operator;
-    //     //     let conditions: ConditionId[] = [];
-    //     //     toggle?.conditions.forEach((condition) => {
-    //     //         let conditionValue: ConditionId = {
-    //     //             id: uuidv4(),
-    //     //             contentIds: [],
-    //     //         };
-    //     //         values[`condition-${conditionValue.id}`] = condition.field;
-    //     //         values[`condition-operator-${conditionValue.id}`] =
-    //     //             condition.operator;
-    //     //         condition.contents.forEach((content) => {
-    //     //             const contentId = uuidv4();
-    //     //             conditionValue.contentIds.push(contentId);
-    //     //             values[`content-${contentId}`] = content;
-    //     //         });
-    //     //         conditions.push(conditionValue);
-    //     //     });
-    //     //     setConditionIds(conditionIds)
-    //     //     return values;
-    //     // };
-
-    //     const getConditionIds = (toggle: Toggle | null): ConditionId[] | undefined => {
-    //         return toggle?.conditions.map(condition => {
-    //             return {
-    //                 id: uuidv4(),
-    //                 contentIds: condition.contents.map(content => uuidv4())
-    //             }
-    //         })
-    //     }
-    //     const conditionIds = getConditionIds(toggle)
-    //     setConditionIds(getConditionIds(toggle))
-    // }, []);
 
     return (
         <>
@@ -174,10 +117,7 @@ export const EditToggle: React.FC = () => {
                                 <InputText id='name' {...input} meta={meta} />
                             )}
                         </Field>
-                        <Conditions
-                            conditionIds={conditionIds}
-                            setConditionIds={setConditionIds}
-                        />
+                        <Conditions />
                         <div className='flex justify-between flex-row'>
                             <PrimaryButton
                                 disabled={isUpdateSubmitting}

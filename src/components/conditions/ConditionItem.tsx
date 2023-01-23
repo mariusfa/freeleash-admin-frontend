@@ -1,71 +1,89 @@
-import { Field } from 'react-final-form';
+import { Field, useField } from 'react-final-form';
+import { Condition, Content } from '../../features/toggles/types';
 import { required } from '../../validation/validation';
 import { InputText } from '../InputText';
 import { Label } from '../Label';
 import { SecondaryButton } from '../SecondaryButton';
 import { ConditionOperator } from './ConditionOperator';
-import { ConditionId } from './types';
+
+import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
-    conditionId: ConditionId;
+    condition: Condition;
+    conditionIndex: number;
     removeCondition: (id: string) => void;
-    addConditionContentId: (ConditionId: string) => void;
-    removeConditionContentId: (ConditionId: string, contentId: string) => void;
 }
 
-export const Condition: React.FC<Props> = ({
-    conditionId,
+export const ConditionItem: React.FC<Props> = ({
+    condition,
+    conditionIndex,
     removeCondition,
-    addConditionContentId,
-    removeConditionContentId,
 }) => {
+    const { input } = useField<Content[]>(
+        `conditions[${conditionIndex}].contents`
+    );
+    const contents = input.value
+    
+
+    const addContent = () => {
+        const emptyContent: Content = {
+            id: uuidv4(),
+            value: ''
+        }
+        input.onChange(input.value.concat(emptyContent))
+    }
+
+    const removeContent = (id: string) => {
+        input.onChange(contents.filter(content => content.id !== id))
+    }
 
     return (
         <>
             <div>
-                <Label htmlFor={`condition-${conditionId.id}`}>
+                <Label htmlFor={`conditions[${conditionIndex}].field`}>
                     Condition name
                 </Label>
                 <button
                     className='ml-5 underline'
-                    onClick={() => removeCondition(conditionId.id)}
+                    onClick={() => removeCondition(condition.id)}
                 >
                     Remove
                 </button>
             </div>
-            <Field name={`condition-${conditionId.id}`} validate={required}>
+            <Field
+                name={`conditions[${conditionIndex}].field`}
+                validate={required}
+            >
                 {({ input, meta }) => (
                     <InputText
-                        id={`condition-${conditionId.id}`}
+                        id={`conditions[${conditionIndex}].field`}
                         {...input}
                         meta={meta}
                     />
                 )}
             </Field>
-            <ConditionOperator id={`condition-operator-${conditionId.id}`} />
+            <ConditionOperator id={`conditions[${conditionIndex}].operator`} />
             <ul className='mt-4'>
                 <Label>Values to verify</Label>
-                {conditionId.contentIds.map((contentId) => (
-                    <li key={contentId} className='mb-2'>
+                {contents.map((content, contentIndex) => (
+                    <li key={content.id} className='mb-2'>
                         <div className='flex'>
-                            <Field name={`content-${contentId}`} validate={required}>
+                            <Field
+                                name={`conditions[${conditionIndex}].contents[${contentIndex}].value`}
+                                validate={required}
+                            >
                                 {({ input, meta }) => (
                                     <InputText
-                                        id={`content-${contentId}`}
+                                        id={`conditions[${conditionIndex}].contents[${contentIndex}].value`}
                                         {...input}
                                         meta={meta}
                                     />
                                 )}
                             </Field>
-                            {conditionId.contentIds.length > 1 && (
+                            {contents.length > 1 && (
                                 <button
                                     className='ml-5 underline'
-                                    onClick={() =>
-                                        removeConditionContentId(
-                                            conditionId.id,
-                                            contentId
-                                        )
-                                    }
+                                    onClick={() => removeContent(content.id)}
                                 >
                                     Remove
                                 </button>
@@ -77,7 +95,7 @@ export const Condition: React.FC<Props> = ({
             <SecondaryButton
                 className='block'
                 type='button'
-                onClick={() => addConditionContentId(conditionId.id)}
+                onClick={() => addContent()}
             >
                 Add value
             </SecondaryButton>

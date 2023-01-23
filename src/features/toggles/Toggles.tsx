@@ -10,7 +10,7 @@ import {
     WarningButton,
 } from '../../components';
 import { TeamContext } from '../teams';
-import { Toggle } from './types';
+import { ToggleDTO } from './types';
 
 export const Toggles: React.FC = () => {
     const { teamName } = useParams();
@@ -25,13 +25,13 @@ export const Toggles: React.FC = () => {
         isLoading,
         isError,
         refetch: refetchToggles,
-    } = useGetData<Toggle[]>(
+    } = useGetData<ToggleDTO[]>(
         `http://localhost:8080/toggle?team=${teamName}`,
         [],
         20000
     );
 
-    const toggleClick = async ({ id, ...rest }: Toggle) => {
+    const toggleClick = async ({ id, ...rest }: ToggleDTO) => {
         const { error } = await updateToggle(
             `http://localhost:8080/toggle/${id}`,
             'PUT',

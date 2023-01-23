@@ -1,71 +1,44 @@
 import React from 'react';
 import { SecondaryButton } from '../SecondaryButton';
 import { ToggleOperator } from '../ToggleOperator';
-import { Condition } from './Condition';
-import { ConditionId } from './types';
+import { ConditionItem } from './ConditionItem';
 import { v4 as uuidv4 } from 'uuid';
+import { useField } from 'react-final-form';
+import { Condition, Content } from '../../features/toggles/types';
 
-interface Props {
-    conditionIds: ConditionId[];
-    setConditionIds: (value: React.SetStateAction<ConditionId[]>) => void;
-}
-export const Conditions: React.FC<Props> = ({
-    conditionIds,
-    setConditionIds,
-    ...rest
-}) => {
-    const addNewCondition = () => {
-        setConditionIds((prev: ConditionId[]) => [
-            ...prev,
-            { id: uuidv4(), contentIds: [uuidv4()] },
-        ]);
+export const Conditions: React.FC = () => {
+    const { input } = useField<Condition[]>('conditions');
+    const conditions: Condition[] = input.value;
+
+    const addCondition = () => {
+        const emptyConditon: Condition = {
+            id: uuidv4(),
+            field: '',
+            operator: 'IN',
+            contents: [
+                {
+                    id: uuidv4(),
+                    value: '',
+                },
+            ],
+        };
+        input.onChange(conditions.concat(emptyConditon));
     };
 
     const removeCondition = (id: string) => {
-        setConditionIds((prev: ConditionId[]) =>
-            prev.filter((condition) => condition.id !== id)
-        );
+        input.onChange(conditions.filter((condition) => condition.id !== id));
     };
 
-    const addConditionContentId = (conditionId: string) => {
-        const updated = conditionIds.map((condition) => {
-            if (condition.id !== conditionId) {
-                return condition;
-            }
-            condition.contentIds.push(uuidv4());
-            return condition;
-        });
-        setConditionIds(updated);
-    };
-
-    const removeConditionContentId = (
-        conditionId: string,
-        contentId: string
-    ) => {
-        const updated = conditionIds.map((condition) => {
-            if (condition.id !== conditionId) {
-                return condition;
-            }
-            const updatedContentIds = condition.contentIds.filter(
-                (element) => element !== contentId
-            );
-            condition.contentIds = updatedContentIds;
-            return condition;
-        });
-
-        setConditionIds(updated);
-    };
     return (
         <>
-            {conditionIds.length > 0 && <ToggleOperator />}
+            {conditions.length > 0 && <ToggleOperator />}
             <ul>
-                {conditionIds.map((condition) => (
+                {conditions.map((condition, index) => (
                     <li key={condition.id}>
-                        <Condition
-                            conditionId={condition}
+                        <ConditionItem
+                            condition={condition}
+                            conditionIndex={index}
                             removeCondition={removeCondition}
-                            addConditionContentId={addConditionContentId}
-                            removeConditionContentId={removeConditionContentId}
                         />
                     </li>
                 ))}
@@ -73,7 +46,7 @@ export const Conditions: React.FC<Props> = ({
             <SecondaryButton
                 className='block'
                 type='button'
-                onClick={addNewCondition}
+                onClick={addCondition}
             >
                 Add condition (optional)
             </SecondaryButton>

@@ -11,7 +11,7 @@ export const ConditionOperator: React.FC<Props> = ({ id }) => {
             <Label htmlFor={id}>
                 The condition will be valid when input value is:
             </Label>
-            <Field name={id} initialValue='IN'>
+            <Field name={id}>
                 {({ input }) => (
                     <select id={id} className='bg-gray-50 border border-gray-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ' {...input}>
                         <option value='IN'>Included in list of values</option>
