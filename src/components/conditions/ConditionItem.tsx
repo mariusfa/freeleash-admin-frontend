@@ -23,7 +23,6 @@ export const ConditionItem: React.FC<Props> = ({
         `conditions[${conditionIndex}].contents`
     );
     const contents = input.value
-    
 
     const addContent = () => {
         const emptyContent: Content = {
@@ -65,7 +64,7 @@ export const ConditionItem: React.FC<Props> = ({
             <ConditionOperator id={`conditions[${conditionIndex}].operator`} />
             <ul className='mt-4'>
                 <Label>Values to verify</Label>
-                {contents.map((content, contentIndex) => (
+                {contents && contents.map((content, contentIndex) => (
                     <li key={content.id} className='mb-2'>
                         <div className='flex'>
                             <Field
