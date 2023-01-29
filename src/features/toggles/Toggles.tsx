@@ -10,6 +10,7 @@ import {
     WarningButton,
 } from '../../components';
 import { TeamContext } from '../teams';
+import { DeleteTeamModal } from '../teams/DeleteTeamModal';
 import { ToggleDTO } from './types';
 
 export const Toggles: React.FC = () => {
@@ -79,12 +80,13 @@ export const Toggles: React.FC = () => {
                     <SecondaryButton onClick={() => console.log('hello')}>
                         Edit team
                     </SecondaryButton>
-                    <WarningButton
+                    <DeleteTeamModal />
+                    {/* <WarningButton
                         disabled={isSubmitting}
                         onClick={() => onDeleteTeam()}
                     >
                         {isSubmitting ? 'Deleting...' : 'Delete team'}
-                    </WarningButton>
+                    </WarningButton> */}
                 </div>
             </div>
             <ul className='my-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'>
