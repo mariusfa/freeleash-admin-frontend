@@ -5,8 +5,8 @@ import { InputText } from '../InputText';
 import { Label } from '../Label';
 import { SecondaryButton } from '../SecondaryButton';
 import { ConditionOperator } from './ConditionOperator';
-
 import { v4 as uuidv4 } from 'uuid';
+import { Contents } from './Contents';
 
 interface Props {
     condition: Condition;
@@ -19,23 +19,6 @@ export const ConditionItem: React.FC<Props> = ({
     conditionIndex,
     removeCondition,
 }) => {
-    const { input } = useField<Content[]>(
-        `conditions[${conditionIndex}].contents`
-    );
-    const contents = input.value
-
-    const addContent = () => {
-        const emptyContent: Content = {
-            id: uuidv4(),
-            value: ''
-        }
-        input.onChange(input.value.concat(emptyContent))
-    }
-
-    const removeContent = (id: string) => {
-        input.onChange(contents.filter(content => content.id !== id))
-    }
-
     return (
         <>
             <div>
@@ -62,42 +45,7 @@ export const ConditionItem: React.FC<Props> = ({
                 )}
             </Field>
             <ConditionOperator id={`conditions[${conditionIndex}].operator`} />
-            <ul className='mt-4'>
-                <Label>Values to verify</Label>
-                {contents && contents.map((content, contentIndex) => (
-                    <li key={content.id} className='mb-2'>
-                        <div className='flex'>
-                            <Field
-                                name={`conditions[${conditionIndex}].contents[${contentIndex}].value`}
-                                validate={required}
-                            >
-                                {({ input, meta }) => (
-                                    <InputText
-                                        id={`conditions[${conditionIndex}].contents[${contentIndex}].value`}
-                                        {...input}
-                                        meta={meta}
-                                    />
-                                )}
-                            </Field>
-                            {contents.length > 1 && (
-                                <button
-                                    className='ml-5 underline'
-                                    onClick={() => removeContent(content.id)}
-                                >
-                                    Remove
-                                </button>
-                            )}
-                        </div>
-                    </li>
-                ))}
-            </ul>
-            <SecondaryButton
-                className='block'
-                type='button'
-                onClick={() => addContent()}
-            >
-                Add value
-            </SecondaryButton>
+            <Contents conditionIndex={conditionIndex} />
         </>
     );
 };
