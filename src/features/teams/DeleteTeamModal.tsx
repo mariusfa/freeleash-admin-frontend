@@ -1,20 +1,23 @@
 import { useContext, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSendData } from '../../api';
-import { WarningButton } from '../../components';
+import { ErrorMessage, SecondaryButton, WarningButton } from '../../components';
 import { TeamContext } from './TeamContextProvider';
 
-export const DeleteTeamModal: React.FC = () => {
-    const { teamName } = useParams();
-    const { teams, refetch: refetchTeams } = useContext(TeamContext);
-    const teamId = teams.find((team) => team.name === teamName)?.id;
+interface Props {
+    teamId: number;
+    teamName: string;
+}
+
+export const DeleteTeamModal: React.FC<Props> = ({ teamId, teamName }) => {
+    const { refetch: refetchTeams } = useContext(TeamContext);
     const { sendData, isError: isErrorDelete, isSubmitting } = useSendData();
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const onDeleteTeam = async () => {
+    const onDeleteTeam = async (id: number) => {
         const { error } = await sendData(
-            `http://localhost:8080/team/${teamId}`,
+            `http://localhost:8080/team/${id}`,
             'DELETE'
         );
         if (!error) {
@@ -38,15 +41,18 @@ export const DeleteTeamModal: React.FC = () => {
             </WarningButton>
             {isModalOpen && (
                 <div
-                    id='popup-modal'
                     className='fixed top-0 left-0 right-0 z-50 p-4 overflow-x-hidden overflow-y-auto md:inset-0 md:h-full bg-black bg-opacity-40'
+                    onClick={closeModal}
                 >
-                    <div className='relative w-full h-full max-w-md mx-auto'>
+                    <div
+                        className='relative w-full h-full max-w-md mx-auto'
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <div className='relative bg-white rounded-lg shadow'>
                             <button
                                 type='button'
                                 className='absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center'
-                                onClick={() => closeModal()}
+                                onClick={closeModal}
                             >
                                 <svg
                                     aria-hidden='true'
@@ -80,23 +86,26 @@ export const DeleteTeamModal: React.FC = () => {
                                     ></path>
                                 </svg>
                                 <h3 className='mb-5 text-lg font-normal text-gray-500'>
-                                    Are you sure you want to delete this team?
+                                    Are you sure you want to delete this team:{' '}
+                                    {teamName}?
+                                    Connected toggles will be removed
                                 </h3>
-                                <button
+                                <WarningButton
                                     data-modal-hide='popup-modal'
                                     type='button'
-                                    className='text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2'
+                                    onClick={() => onDeleteTeam(teamId)}
+                                    disabled={isSubmitting}
                                 >
                                     Yes, I'm sure
-                                </button>
-                                <button
+                                </WarningButton>
+                                <SecondaryButton
                                     data-modal-hide='popup-modal'
                                     type='button'
-                                    className='text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10'
-                                    onClick={() => closeModal()}
+                                    onClick={closeModal}
                                 >
                                     No, cancel
-                                </button>
+                                </SecondaryButton>
+                                {isErrorDelete && <ErrorMessage>Deleting team failed</ErrorMessage>}
                             </div>
                         </div>
                     </div>

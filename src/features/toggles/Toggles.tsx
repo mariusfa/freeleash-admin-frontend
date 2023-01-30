@@ -7,7 +7,6 @@ import {
     PrimaryButton,
     SecondaryButton,
     Spinner,
-    WarningButton,
 } from '../../components';
 import { TeamContext } from '../teams';
 import { DeleteTeamModal } from '../teams/DeleteTeamModal';
@@ -18,7 +17,6 @@ export const Toggles: React.FC = () => {
     const { teams, refetch: refetchTeams } = useContext(TeamContext);
     const teamId = teams.find((team) => team.name === teamName)?.id;
     const navigate = useNavigate();
-    const { sendData, isError: isErrorDelete, isSubmitting } = useSendData();
     const { sendData: updateToggle, isError: isUpdateError } = useSendData();
 
     const {
@@ -46,16 +44,9 @@ export const Toggles: React.FC = () => {
         }
     };
 
-    const onDeleteTeam = async () => {
-        const { error } = await sendData(
-            `http://localhost:8080/team/${teamId}`,
-            'DELETE'
-        );
-        if (!error) {
-            refetchTeams();
-            navigate('/');
-        }
-    };
+    if (!teamId || !teamName) {
+        return <ErrorMessage>Could not find team:{teamName}</ErrorMessage>;
+    }
 
     if (isError) {
         return <ErrorMessage>Failed getting toggles</ErrorMessage>;
@@ -68,7 +59,6 @@ export const Toggles: React.FC = () => {
     return (
         <>
             <Heading1>Toggles for team {teamName}</Heading1>
-            {isErrorDelete && <ErrorMessage>Deleting team failed</ErrorMessage>}
             {isUpdateError && (
                 <ErrorMessage>Updating toggle failed</ErrorMessage>
             )}
@@ -77,16 +67,12 @@ export const Toggles: React.FC = () => {
                     Create new toggle
                 </PrimaryButton>
                 <div>
-                    <SecondaryButton onClick={() => console.log('hello')}>
+                    <SecondaryButton
+                        onClick={() => navigate(`/${teamName}/edit`)}
+                    >
                         Edit team
                     </SecondaryButton>
-                    <DeleteTeamModal />
-                    {/* <WarningButton
-                        disabled={isSubmitting}
-                        onClick={() => onDeleteTeam()}
-                    >
-                        {isSubmitting ? 'Deleting...' : 'Delete team'}
-                    </WarningButton> */}
+                    <DeleteTeamModal teamId={teamId} teamName={teamName} />
                 </div>
             </div>
             <ul className='my-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'>
