@@ -7,6 +7,7 @@ import { SecondaryButton } from '../SecondaryButton';
 import { ConditionOperator } from './ConditionOperator';
 import { v4 as uuidv4 } from 'uuid';
 import { Contents } from './Contents';
+import { TertiaryButton } from '../TertiaryButton';
 
 interface Props {
     condition: Condition;
@@ -20,17 +21,16 @@ export const ConditionItem: React.FC<Props> = ({
     removeCondition,
 }) => {
     return (
-        <>
-            <div>
+        <div className='rounded-md border border-slate-200 p-6 shadow-md mb-4'>
+            <div className='flex justify-between'>
                 <Label htmlFor={`conditions[${conditionIndex}].field`}>
                     Condition name
                 </Label>
-                <button
-                    className='ml-5 underline'
+                <TertiaryButton
                     onClick={() => removeCondition(condition.id)}
                 >
                     Remove
-                </button>
+                </TertiaryButton>
             </div>
             <Field
                 name={`conditions[${conditionIndex}].field`}
@@ -46,6 +46,6 @@ export const ConditionItem: React.FC<Props> = ({
             </Field>
             <ConditionOperator id={`conditions[${conditionIndex}].operator`} />
             <Contents conditionIndex={conditionIndex} />
-        </>
+        </div>
     );
 };

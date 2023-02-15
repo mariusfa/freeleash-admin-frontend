@@ -5,6 +5,7 @@ import { required } from '../../validation/validation';
 import { InputText } from '../InputText';
 import { Label } from '../Label';
 import { SecondaryButton } from '../SecondaryButton';
+import { TertiaryButton } from '../TertiaryButton';
 
 interface Props {
     conditionIndex: number;
@@ -47,12 +48,12 @@ export const Contents: React.FC<Props> = ({conditionIndex}) => {
                                 )}
                             </Field>
                             {contents.length > 1 && (
-                                <button
-                                    className='ml-5 underline'
+                                <TertiaryButton
+                                    className='ml-5'
                                     onClick={() => removeContent(content.id)}
                                 >
                                     Remove
-                                </button>
+                                </TertiaryButton>
                             )}
                         </div>
                     </li>
