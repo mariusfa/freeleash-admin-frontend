@@ -7,7 +7,7 @@ describe ('PrimaryButton', () => {
         render(<PrimaryButton>Click Me</PrimaryButton>);
 
         const button = screen.getByRole('button');
-        expect(button).toBeDefined;
+        expect(button).toBeDefined();
         expect(button.textContent).toBe('Click Me');
     });
 });

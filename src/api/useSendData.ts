@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { sendJson } from './sendJson';
 
-export const useSendData = (): {
-    isSubmitting: boolean;
-    isError: boolean;
-    sendData: (
+export type sendDataType = (
         url: string,
         method: 'POST' | 'PUT' | 'DELETE',
         data?: object | object[]
     ) => Promise<{ error: boolean }>;
+
+export const useSendData = (): {
+    isSubmitting: boolean;
+    isError: boolean;
+    sendData: sendDataType;
 } => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isError, setIsError] = useState(false);
