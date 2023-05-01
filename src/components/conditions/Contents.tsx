@@ -2,9 +2,9 @@ import { Field, useField } from 'react-final-form';
 import { v4 as uuidv4 } from 'uuid';
 import { Content } from '../../features/toggles/types';
 import { required } from '../../validation/validation';
-import { InputText } from '../InputText';
-import { Label } from '../Label';
-import { SecondaryButton } from '../SecondaryButton';
+import { SecondaryButton } from '../buttons/SecondaryButton';
+import { InputText } from '../text/InputText';
+import { Label } from '../text/Label';
 
 interface Props {
     conditionIndex: number;

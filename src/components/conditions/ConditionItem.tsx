@@ -1,11 +1,9 @@
-import { Field, useField } from 'react-final-form';
-import { Condition, Content } from '../../features/toggles/types';
+import { Field } from 'react-final-form';
+import { Condition } from '../../features/toggles/types';
 import { required } from '../../validation/validation';
-import { InputText } from '../InputText';
-import { Label } from '../Label';
-import { SecondaryButton } from '../SecondaryButton';
+import { InputText } from '../text/InputText';
+import { Label } from '../text/Label';
 import { ConditionOperator } from './ConditionOperator';
-import { v4 as uuidv4 } from 'uuid';
 import { Contents } from './Contents';
 
 interface Props {

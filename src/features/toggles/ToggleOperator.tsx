@@ -1,6 +1,6 @@
 import { Field } from 'react-final-form';
-import { Label } from './Label';
-import { RadioButton } from './RadioButton';
+import { Label } from '../../components/text/Label';
+import { RadioButton } from '../../components/buttons/RadioButton';
 
 export const ToggleOperator: React.FC = () => {
     return (

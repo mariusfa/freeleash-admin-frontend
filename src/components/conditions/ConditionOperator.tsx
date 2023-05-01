@@ -1,5 +1,5 @@
 import { Field } from 'react-final-form';
-import { Label } from '../Label';
+import { Label } from '../text/Label';
 
 interface Props {
     id: string;

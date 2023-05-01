@@ -1,10 +1,10 @@
 import React from 'react';
-import { SecondaryButton } from '../SecondaryButton';
-import { ToggleOperator } from '../ToggleOperator';
+import { ToggleOperator } from '../../features/toggles/ToggleOperator';
 import { ConditionItem } from './ConditionItem';
 import { v4 as uuidv4 } from 'uuid';
 import { useField } from 'react-final-form';
 import { Condition, Content } from '../../features/toggles/types';
+import { SecondaryButton } from '../buttons/SecondaryButton';
 
 export const Conditions: React.FC = () => {
     const { input } = useField<Condition[]>('conditions');

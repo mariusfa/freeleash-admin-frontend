@@ -24,3 +24,4 @@ export const InputText: React.FC<Props> = ({ meta, className, ...rest }) => {
         </div>
     );
 };
+
