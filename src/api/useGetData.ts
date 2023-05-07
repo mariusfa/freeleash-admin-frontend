@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getJson } from './getJson';
+import { jsonWrapper } from './jsonWrapper';
 
 export const useGetData = <T>(
     url: string,
@@ -13,7 +13,7 @@ export const useGetData = <T>(
 
     useEffect(() => {
         const getData = async () => {
-            const { data: result, error } = await getJson(url);
+            const { data: result, error } = await jsonWrapper.getJson(url);
             setData(result);
             setIsError(!!error);
             setRefetch(false);

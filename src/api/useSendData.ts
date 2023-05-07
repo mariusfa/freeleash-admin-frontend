@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { sendJson } from './sendJson';
+import { jsonWrapper } from './jsonWrapper';
 
 export type sendDataType = (
         url: string,
@@ -23,7 +23,7 @@ export const useSendData = (): {
         setIsSubmitting(true);
         setIsError(false);
 
-        const { error } = await sendJson(url, method, data)
+        const { error } = await jsonWrapper.sendJson(url, method, data)
 
         setIsSubmitting(false);
         if (error) {

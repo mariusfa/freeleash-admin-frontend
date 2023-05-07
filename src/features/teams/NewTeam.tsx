@@ -1,16 +1,7 @@
 import { useContext } from 'react';
-import { Field, Form } from 'react-final-form';
 import { useNavigate } from 'react-router-dom';
 import { useSendData } from '../../api';
 import { sendDataType } from '../../api/useSendData';
-import {
-    ErrorMessage,
-    Heading1,
-    InputText,
-    Label,
-    PrimaryButton
-} from '../../components';
-import { required } from '../../validation/validation';
 import { NewTeamForm } from './NewTeamForm';
 import { TeamContext } from './TeamContextProvider';
 
